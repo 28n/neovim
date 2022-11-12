@@ -145,7 +145,8 @@ local function plugins(use, plugin)
 				},
 			})
 		end,
-	})]]--
+	})]]
+	--
 
 	-- Theme: color schemes
 	plugin("folke/tokyonight.nvim")
