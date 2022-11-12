@@ -14,15 +14,6 @@ local config = {
 	auto_reload_compiled = false,
 	-- list of plugins that should be taken from ~/projects
 	-- this is NOT packer functionality!
-	local_plugins = {
-		folke = true,
-		-- ["folke/neodev.nvim"] = false,
-		-- ["null-ls.nvim"] = true,
-		-- ["nvim-lspconfig"] = true,
-		-- ["nvim-notify"] = true,
-		-- ["yanky.nvim"] = true,
-		-- ["nvim-treesitter"] = true,
-	},
 }
 
 local function plugins(use, plugin)
@@ -39,13 +30,6 @@ local function plugins(use, plugin)
 		end,
 	})
 
-	use({
-		"folke/paint.nvim",
-		event = "BufReadPre",
-		config = function()
-			require("paint").setup()
-		end,
-	})
 	plugin("toppair/peek.nvim")
 
 	plugin("b0o/incline.nvim")
@@ -64,11 +48,6 @@ local function plugins(use, plugin)
 	plugin("jose-elias-alvarez/null-ls.nvim")
 
 	use({ "folke/neodev.nvim", module = "neodev" })
-	use({
-		"folke/neoconf.nvim",
-		module = "neoconf",
-		cmd = "Neoconf",
-	})
 
 	plugin("anuvyklack/windows.nvim")
 
@@ -153,7 +132,7 @@ local function plugins(use, plugin)
 
 	use({ "nvim-treesitter/playground", cmd = { "TSHighlightCapturesUnderCursor", "TSPlaygroundToggle" } })
 
-	use({
+	--[[use({
 		"m-demare/hlargs.nvim",
 		event = "User PackerDefered",
 		config = function()
@@ -166,7 +145,7 @@ local function plugins(use, plugin)
 				},
 			})
 		end,
-	})
+	})]]--
 
 	-- Theme: color schemes
 	plugin("folke/tokyonight.nvim")
