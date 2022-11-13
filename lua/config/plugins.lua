@@ -271,6 +271,14 @@ local function plugins(use, plugin)
 			vim.g.matchup_matchparen_offscreen = { method = "status_manual" }
 		end,
 	})
+
+	use({
+		"github/copilot.vim",
+		event = "BufReadPre",
+		config = function()
+			vim.notify("Copilot loaded")
+		end,
+	})
 end
 
 return packer.setup(config, plugins)
