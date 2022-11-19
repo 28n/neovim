@@ -105,6 +105,13 @@ function M.config()
 		teal_ls = {},
 		vimls = {},
 		tailwindcss = {},
+		elixirls = {
+			cmd = { "C:/elixirls/language_server.bat" },
+			filetypes = { "elixir", "eelixir", "heex", "surface" },
+			root_dir = function(fname)
+				return require("lspconfig").util.root_pattern("mix.exs", ".git")(fname) or vim.loop.os_homedir()
+			end,
+		},
 	}
 
 	local capabilities = vim.lsp.protocol.make_client_capabilities()
