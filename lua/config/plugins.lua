@@ -279,6 +279,16 @@ local function plugins(use, plugin)
 			vim.notify("Copilot loaded")
 		end,
 	})
+
+	use({
+		"folke/drop.nvim",
+		event = "VimEnter",
+		config = function()
+			require("drop").setup({
+				theme = "snow",
+			})
+		end,
+	})
 end
 
 return packer.setup(config, plugins)
