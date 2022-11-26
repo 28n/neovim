@@ -55,6 +55,7 @@ vim.opt.expandtab = true -- Use spaces instead of tabs
 vim.o.formatoptions = "jcroqlnt" -- tcqj
 
 vim.opt.guifont = "JetBrainsMono Nerd Font:h12"
+vim.cmd("colorscheme oxocarbon-lua")
 vim.opt.grepprg = "rg --vimgrep"
 vim.opt.grepformat = "%f:%l:%c:%m"
 vim.opt.hidden = true -- Enable modified buffers in background

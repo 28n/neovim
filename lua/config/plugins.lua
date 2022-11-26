@@ -289,6 +289,11 @@ local function plugins(use, plugin)
 			})
 		end,
 	})
+
+	use({
+		"B4mbus/oxocarbon-lua.nvim",
+		opt = false,
+	})
 end
 
 return packer.setup(config, plugins)
