@@ -90,6 +90,8 @@ local function plugins(use, plugin)
 
 	plugin("windwp/nvim-autopairs")
 
+	plugin("windwp/nvim-ts-autotag")
+
 	plugin("L3MON4D3/LuaSnip")
 
 	use({
