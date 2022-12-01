@@ -281,6 +281,8 @@ local function plugins(use, plugin)
 			vim.notify("Copilot loaded")
 		end,
 	})
+
+	plugin("prichrd/netrw.nvim")
 end
 
 return packer.setup(config, plugins)

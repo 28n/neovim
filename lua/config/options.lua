@@ -39,6 +39,8 @@ end
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 vim.g.node_host_prog = "/Users/folke/.pnpm-global/5/node_modules/neovim/bin/cli.js"
+vim.g.python3_host_prog = "C:/Users/weedy/AppData/Local/Microsoft/WindowsApps/python3.exe"
+-- C:\Users\weedy\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\python.exe
 vim.opt.autowrite = true -- enable auto write
 vim.opt.clipboard = "unnamedplus" -- sync with system clipboard
 -- vim.opt.concealcursor = "nc" -- Hide * markup for bold and italic
@@ -121,10 +123,10 @@ local builtins = {
 	"matchparen",
 	"logiPat",
 	"rrhelper",
-	"netrw",
-	"netrwPlugin",
-	"netrwSettings",
-	"netrwFileHandlers",
+	-- "netrw",
+	-- "netrwPlugin",
+	-- "netrwSettings",
+	-- "netrwFileHandlers",
 }
 
 for _, plugin in ipairs(builtins) do

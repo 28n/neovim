@@ -205,6 +205,7 @@ local leader = {
 		name = "+file",
 		t = { "<cmd>Neotree toggle<cr>", "NeoTree" },
 		f = { "<cmd>Telescope find_files<cr>", "Find File" },
+		e = { "<cmd>Explore<cr>", "Netrw" },
 		r = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
 		n = { "<cmd>enew<cr>", "New File" },
 		z = "Zoxide",
