@@ -275,10 +275,19 @@ local function plugins(use, plugin)
 	})
 
 	use({
-		"github/copilot.vim",
+		"zbirenbaum/copilot.lua",
 		event = "BufReadPre",
 		config = function()
 			vim.notify("Copilot loaded")
+			require("copilot").setup()
+		end,
+	})
+
+	use({
+		"zbirenbaum/copilot-cmp",
+		after = { "copilot.lua" },
+		config = function()
+			require("copilot_cmp").setup()
 		end,
 	})
 
