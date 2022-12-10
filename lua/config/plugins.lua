@@ -290,13 +290,6 @@ local function plugins(use, plugin)
 			require("copilot_cmp").setup()
 		end,
 	})
-
-	plugin("prichrd/netrw.nvim")
-
-	use({
-		"nyoom-engineering/oxocarbon.nvim",
-		opt = false,
-	})
 end
 
 return packer.setup(config, plugins)

@@ -3,19 +3,19 @@ local M = {
 }
 
 function M.config()
-	-- local colors = require("tokyonight.colors").setup()
+	local colors = require("tokyonight.colors").setup()
 
 	require("incline").setup({
 		highlight = {
 			groups = {
 				InclineNormal = {
 					guibg = "#FC56B1",
-					-- guifg = colors.black,
+					guifg = colors.black,
 					-- gui = "bold",
 				},
 				InclineNormalNC = {
 					guifg = "#FC56B1",
-					-- guibg = colors.black,
+					guibg = colors.black,
 				},
 			},
 		},
