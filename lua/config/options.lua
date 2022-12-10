@@ -148,3 +148,6 @@ local fences = {
 	"console=sh",
 }
 vim.g.markdown_fenced_languages = fences
+
+vim.opt.background = "dark"
+vim.cmd("colorscheme oxocarbon")

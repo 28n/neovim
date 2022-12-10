@@ -292,6 +292,11 @@ local function plugins(use, plugin)
 	})
 
 	plugin("prichrd/netrw.nvim")
+
+	use({
+		"nyoom-engineering/oxocarbon.nvim",
+		opt = false,
+	})
 end
 
 return packer.setup(config, plugins)
