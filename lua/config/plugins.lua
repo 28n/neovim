@@ -151,7 +151,7 @@ local function plugins(use, plugin)
 	--
 
 	-- Theme: color schemes
-	plugin("folke/tokyonight.nvim")
+	-- plugin("folke/tokyonight.nvim")
 
 	-- Theme: icons
 	use({
@@ -289,6 +289,11 @@ local function plugins(use, plugin)
 		config = function()
 			require("copilot_cmp").setup()
 		end,
+	})
+
+	use({
+		"nyoom-engineering/oxocarbon.nvim",
+		opt = false,
 	})
 end
 
