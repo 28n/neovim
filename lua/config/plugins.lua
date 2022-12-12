@@ -300,6 +300,12 @@ local function plugins(use, plugin)
 		"ellisonleao/glow.nvim",
 		ft = "markdown",
 	})
+
+	use({
+		"toppair/peek.nvim",
+		ft = "markdown",
+		run = "deno task --quiet build:fast",
+	})
 end
 
 return packer.setup(config, plugins)
