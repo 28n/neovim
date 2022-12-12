@@ -134,12 +134,12 @@ local function plugins(use, plugin)
 
 	use({ "nvim-treesitter/playground", cmd = { "TSHighlightCapturesUnderCursor", "TSPlaygroundToggle" } })
 
-	--[[use({
+	use({
 		"m-demare/hlargs.nvim",
 		event = "User PackerDefered",
 		config = function()
 			require("hlargs").setup({
-				color = require("tokyonight.colors").setup().yellow,
+				color = "#FFAB91",
 				excluded_argnames = {
 					usages = {
 						lua = { "self", "use" },
@@ -147,7 +147,7 @@ local function plugins(use, plugin)
 				},
 			})
 		end,
-	})]]
+	})
 	--
 
 	-- Theme: color schemes
@@ -294,6 +294,11 @@ local function plugins(use, plugin)
 	use({
 		"nyoom-engineering/oxocarbon.nvim",
 		opt = false,
+	})
+
+	use({
+		"ellisonleao/glow.nvim",
+		ft = "markdown",
 	})
 end
 
