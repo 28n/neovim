@@ -150,3 +150,8 @@ local fences = {
 vim.g.markdown_fenced_languages = fences
 
 vim.cmd([[colorscheme oxocarbon]])
+
+---Diffview Fillchars
+
+local set = vim.opt
+set.fillchars = set.fillchars + "diff:╱"
