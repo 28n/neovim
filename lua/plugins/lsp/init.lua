@@ -120,6 +120,7 @@ function M.config()
 		dynamicRegistration = false,
 		lineFoldingOnly = true,
 	}
+	capabilities.offsetEncoding = { "utf-16" }
 
 	---@type _.lspconfig.options
 	local options = {
