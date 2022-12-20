@@ -22,6 +22,7 @@ M.icons = {
   Unit = " ",
   Value = " ",
   Variable = " ",
+  Copilot = " ",
 }
 
 function M.cmp_format()
