@@ -48,6 +48,7 @@ function M.setup(client, buffer)
           a = { "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", "Add Folder" },
           r = { "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", "Remove Folder" },
           l = { "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", "List Folders" },
+          f = { "<cmd>Lspsaga lsp_finder<CR>", "Saga Finder"},
         },
       },
       x = {

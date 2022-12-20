@@ -2,7 +2,7 @@ local M = {
   "neovim/nvim-lspconfig",
   name = "lsp",
   event = "BufReadPre",
-  dependencies = { "hrsh7th/cmp-nvim-lsp" },
+  dependencies = { "hrsh7th/cmp-nvim-lsp", "glepnir/lspsaga.nvim" },
 }
 
 function M.config()
@@ -24,6 +24,10 @@ function M.config()
     require("config.plugins.lsp.formatting").setup(client, bufnr)
     require("config.plugins.lsp.keys").setup(client, bufnr)
   end
+
+  local saga = require("lspsaga")
+
+  saga.init_lsp_saga()
 
   ---@type lspconfig.options
   local servers = {
