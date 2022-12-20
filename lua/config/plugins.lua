@@ -1,305 +1,242 @@
-local packer = require("util.packer")
+return {
+  "b0o/SchemaStore.nvim",
+  "jose-elias-alvarez/typescript.nvim",
+  "folke/neodev.nvim",
+  "MunifTanjim/nui.nvim",
+  "williamboman/mason-lspconfig.nvim",
+  "nvim-lua/plenary.nvim",
+  "windwp/nvim-spectre",
+  "rlch/github-notifications.nvim",
+  "folke/twilight.nvim",
+  "folke/which-key.nvim",
+  { "folke/neoconf.nvim", cmd = "Neoconf" },
 
-local config = {
-	profile = {
-		enable = true,
-		threshold = 0, -- the amount in ms that a plugins load time must be over for it to be included in the profile
-	},
-	display = {
-		open_fn = function()
-			return require("packer.util").float({ border = "single" })
-		end,
-	},
-	opt_default = true,
-	auto_reload_compiled = false,
-	-- list of plugins that should be taken from ~/projects
-	-- this is NOT packer functionality!
+  {
+    "smjonas/inc-rename.nvim",
+    cmd = "IncRename",
+    config = function()
+      require("inc_rename").setup()
+    end,
+  },
+
+  {
+    "folke/styler.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("styler").setup({
+        themes = {
+          markdown = { colorscheme = "tokyonight-storm" },
+          help = { colorscheme = "oxocarbon", background = "dark" },
+          -- noice = { colorscheme = "gruvbox", background = "dark" },
+        },
+      })
+    end,
+  },
+
+  {
+    "folke/drop.nvim",
+    event = "VimEnter",
+    enabled = true,
+    config = function()
+      math.randomseed(os.time())
+      local theme = ({ "stars", "snow", "xmas" })[math.random(1, 3)]
+      require("drop").setup({ theme = theme })
+    end,
+  },
+
+  { "shaunsingh/oxocarbon.nvim", lazy = false, enabled = true },
+
+  { "ellisonleao/gruvbox.nvim", lazy = false },
+
+  {
+    "folke/paint.nvim",
+    enabled = false,
+    event = "BufReadPre",
+    config = function()
+      require("paint").setup({
+        highlights = {
+          {
+            filter = { filetype = "lua" },
+            pattern = "%s*%-%-%-%s*(@%w+)",
+            hl = "Constant",
+          },
+          {
+            filter = { filetype = "lua" },
+            pattern = "%s*%-%-%[%[(@%w+)",
+            hl = "Constant",
+          },
+          {
+            filter = { filetype = "lua" },
+            pattern = "%s*%-%-%-%s*@field%s+(%S+)",
+            hl = "@field",
+          },
+          {
+            filter = { filetype = "lua" },
+            pattern = "%s*%-%-%-%s*@class%s+(%S+)",
+            hl = "@variable.builtin",
+          },
+          {
+            filter = { filetype = "lua" },
+            pattern = "%s*%-%-%-%s*@alias%s+(%S+)",
+            hl = "@keyword",
+          },
+          {
+            filter = { filetype = "lua" },
+            pattern = "%s*%-%-%-%s*@param%s+(%S+)",
+            hl = "@parameter",
+          },
+        },
+      })
+    end,
+  },
+
+  { "stevearc/dressing.nvim", event = "VeryLazy" },
+
+  -- LSP
+
+  {
+    "SmiteshP/nvim-navic",
+    config = function()
+      vim.g.navic_silence = true
+      require("nvim-navic").setup({ separator = " ", highlight = true, depth_limit = 5 })
+    end,
+  },
+
+  {
+    "ThePrimeagen/refactoring.nvim",
+    init = function()
+      -- prompt for a refactor to apply when the remap is triggered
+      vim.keymap.set("v", "<leader>r", function()
+        require("refactoring").select_refactor()
+      end, { noremap = true, silent = true, expr = false })
+    end,
+    config = function()
+      require("refactoring").setup({})
+    end,
+  },
+
+  {
+    "simrat39/symbols-outline.nvim",
+    cmd = "SymbolsOutline",
+    init = function()
+      vim.keymap.set("n", "<leader>cs", "<cmd>SymbolsOutline<cr>", { desc = "Symbols Outline" })
+    end,
+    config = function()
+      require("symbols-outline").setup()
+    end,
+  },
+
+  {
+    "danymat/neogen",
+    config = function()
+      require("neogen").setup({ snippet_engine = "luasnip" })
+    end,
+  },
+
+  {
+    "m-demare/hlargs.nvim",
+    event = "VeryLazy",
+    enabled = false,
+    config = function()
+      require("hlargs").setup({
+        excluded_argnames = {
+          usages = {
+            lua = { "self", "use" },
+          },
+        },
+      })
+    end,
+  },
+
+  -- Theme: icons
+  {
+    "nvim-tree/nvim-web-devicons",
+    config = function()
+      require("nvim-web-devicons").setup({ default = true })
+    end,
+  },
+
+  {
+    "norcalli/nvim-terminal.lua",
+    ft = "terminal",
+    config = function()
+      require("terminal").setup()
+    end,
+  },
+
+  {
+    "folke/trouble.nvim",
+    cmd = { "TroubleToggle", "Trouble" },
+    config = function()
+      require("trouble").setup({
+        auto_open = false,
+        use_diagnostic_signs = true, -- en
+      })
+    end,
+  },
+
+  {
+    "folke/persistence.nvim",
+    event = "BufReadPre",
+    config = function()
+      require("persistence").setup({
+        options = { "buffers", "curdir", "tabpages", "winsize", "help" },
+      })
+    end,
+  },
+  {
+    "Wansmer/treesj",
+    keys = "J",
+    config = function()
+      require("treesj").setup({ use_default_keymaps = false })
+      vim.keymap.set("n", "J", "<cmd>TSJToggle<cr>")
+    end,
+  },
+  {
+    "cshuaimin/ssr.nvim",
+    -- Calling setup is optional.
+    init = function()
+      vim.keymap.set({ "n", "x" }, "<leader>cR", function()
+        require("ssr").open()
+      end, { desc = "Structural Replace" })
+    end,
+  },
+
+  {
+    "dstein64/vim-startuptime",
+    cmd = "StartupTime",
+    config = function()
+      vim.g.startuptime_tries = 10
+    end,
+  },
+
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    event = "BufReadPre",
+    config = function()
+      require("treesitter-context").setup()
+    end,
+  },
+
+  {
+    "folke/zen-mode.nvim",
+    cmd = "ZenMode",
+    config = function()
+      require("zen-mode").setup({
+        plugins = {
+          gitsigns = true,
+          tmux = true,
+          kitty = { enabled = false, font = "+2" },
+        },
+      })
+    end,
+  },
+
+  {
+    "andymass/vim-matchup",
+    event = "BufReadPost",
+    config = function()
+      vim.g.matchup_matchparen_offscreen = { method = "status_manual" }
+    end,
+  },
 }
-
-local function plugins(use, plugin)
-	-- Packer can manage itself as an optional plugin
-	use({ "wbthomason/packer.nvim" })
-	plugin("folke/noice.nvim")
-
-	use({
-		"smjonas/inc-rename.nvim",
-		cmd = "IncRename",
-		module = "inc_rename",
-		config = function()
-			require("inc_rename").setup()
-		end,
-	})
-
-	plugin("toppair/peek.nvim")
-
-	plugin("b0o/incline.nvim")
-	plugin("gbprod/yanky.nvim")
-
-	use({ "stevearc/dressing.nvim", event = "User PackerDefered" })
-
-	plugin("rcarriga/nvim-notify")
-
-	-- LSP
-	use({ "neovim/nvim-lspconfig", plugin = "lsp" })
-
-	use({ "b0o/SchemaStore.nvim", module = "schemastore" })
-	use({ "jose-elias-alvarez/typescript.nvim", module = "typescript" })
-
-	plugin("jose-elias-alvarez/null-ls.nvim")
-
-	use({ "folke/neodev.nvim", module = "neodev" })
-
-	plugin("anuvyklack/windows.nvim")
-
-	plugin("monaqa/dial.nvim")
-
-	plugin("williamboman/mason.nvim")
-	use({
-		"williamboman/mason-lspconfig.nvim",
-		module = "mason-lspconfig",
-	})
-
-	use({
-		"SmiteshP/nvim-navic",
-		module = "nvim-navic",
-		config = function()
-			vim.g.navic_silence = true
-			require("nvim-navic").setup({ separator = " ", highlight = true, depth_limit = 5 })
-		end,
-	})
-
-	use({
-		"ThePrimeagen/refactoring.nvim",
-		module = "refactoring",
-		config = function()
-			require("refactoring").setup({})
-		end,
-		setup = function()
-			-- prompt for a refactor to apply when the remap is triggered
-			vim.keymap.set("v", "<leader>cr", function()
-				require("refactoring").select_refactor()
-			end, { noremap = true, silent = true, expr = false })
-		end,
-	})
-
-	plugin("simrat39/rust-tools.nvim")
-
-	plugin("petertriho/nvim-scrollbar")
-
-	plugin("hrsh7th/nvim-cmp")
-
-	plugin("windwp/nvim-autopairs")
-
-	plugin("windwp/nvim-ts-autotag")
-
-	plugin("L3MON4D3/LuaSnip")
-
-	use({
-		"kylechui/nvim-surround",
-		event = "BufReadPre",
-		config = function()
-			require("nvim-surround").setup({})
-		end,
-	})
-
-	use({
-		"simrat39/symbols-outline.nvim",
-		cmd = { "SymbolsOutline" },
-		config = function()
-			require("symbols-outline").setup()
-		end,
-		setup = function()
-			vim.keymap.set("n", "<leader>cs", "<cmd>SymbolsOutline<cr>", { desc = "Symbols Outline" })
-		end,
-	})
-
-	plugin("numToStr/Comment.nvim")
-
-	plugin("nvim-neo-tree/neo-tree.nvim")
-
-	use({
-		"MunifTanjim/nui.nvim",
-		module = "nui",
-	})
-
-	use({
-		"danymat/neogen",
-		module = "neogen",
-		config = function()
-			require("neogen").setup({ snippet_engine = "luasnip" })
-		end,
-	})
-
-	plugin("nvim-treesitter/nvim-treesitter")
-
-	use({ "nvim-treesitter/playground", cmd = { "TSHighlightCapturesUnderCursor", "TSPlaygroundToggle" } })
-
-	use({
-		"m-demare/hlargs.nvim",
-		event = "User PackerDefered",
-		config = function()
-			require("hlargs").setup({
-				color = "#FFAB91",
-				excluded_argnames = {
-					usages = {
-						lua = { "self", "use" },
-					},
-				},
-			})
-		end,
-	})
-	--
-
-	-- Theme: color schemes
-	-- plugin("folke/tokyonight.nvim")
-
-	-- Theme: icons
-	use({
-		"kyazdani42/nvim-web-devicons",
-		module = "nvim-web-devicons",
-		config = function()
-			require("nvim-web-devicons").setup({ default = true })
-		end,
-	})
-
-	-- Dashboard
-	plugin("glepnir/dashboard-nvim")
-
-	use({
-		"norcalli/nvim-terminal.lua",
-		ft = "terminal",
-		config = function()
-			require("terminal").setup()
-		end,
-	})
-	use({ "nvim-lua/plenary.nvim", module = "plenary" })
-
-	use({
-		"windwp/nvim-spectre",
-		module = "spectre",
-	})
-
-	-- Fuzzy finder
-	plugin("nvim-telescope/telescope.nvim")
-
-	plugin("lukas-reineke/indent-blankline.nvim")
-	plugin("akinsho/nvim-bufferline.lua")
-
-	-- Terminal
-	plugin("akinsho/nvim-toggleterm.lua")
-
-	-- Smooth Scrolling
-	plugin("karb94/neoscroll.nvim")
-
-	plugin("edluffy/specs.nvim")
-
-	plugin("echasnovski/mini.nvim")
-
-	plugin("lewis6991/gitsigns.nvim")
-	plugin("TimUntersberger/neogit")
-
-	plugin("mfussenegger/nvim-dap")
-
-	use({ "rlch/github-notifications.nvim", module = "github-notifications" })
-	-- Statusline
-	plugin("nvim-lualine/lualine.nvim")
-
-	plugin("NvChad/nvim-colorizer.lua")
-
-	-- plugin("kevinhwang91/nvim-ufo")
-
-	plugin("phaazon/hop.nvim")
-
-	use({
-		"folke/trouble.nvim",
-		event = "BufReadPre",
-		module = "trouble",
-		cmd = { "TroubleToggle", "Trouble" },
-		config = function()
-			require("trouble").setup({
-				auto_open = false,
-				use_diagnostic_signs = true, -- en
-			})
-		end,
-	})
-
-	use({
-		"folke/persistence.nvim",
-		event = "BufReadPre",
-		module = "persistence",
-		config = function()
-			require("persistence").setup()
-		end,
-	})
-
-	use({
-		"dstein64/vim-startuptime",
-		cmd = "StartupTime",
-		config = function()
-			vim.g.startuptime_tries = 10
-		end,
-	})
-
-	use({ "folke/twilight.nvim", module = "twilight" })
-	use({
-		"folke/zen-mode.nvim",
-		cmd = "ZenMode",
-		config = function()
-			require("zen-mode").setup({
-				plugins = { gitsigns = true, tmux = true, kitty = { enabled = false, font = "+2" } },
-			})
-		end,
-	})
-
-	plugin("pwntester/octo.nvim")
-
-	plugin("folke/todo-comments.nvim")
-
-	use({
-		"folke/which-key.nvim",
-		module = "which-key",
-	})
-
-	plugin("sindrets/diffview.nvim")
-
-	plugin("RRethy/vim-illuminate")
-
-	plugin("nvim-neorg/neorg")
-
-	use({
-		"andymass/vim-matchup",
-		event = "BufReadPost",
-		config = function()
-			vim.g.matchup_matchparen_offscreen = { method = "status_manual" }
-		end,
-	})
-
-	use({
-		"zbirenbaum/copilot.lua",
-		event = "BufReadPre",
-		config = function()
-			vim.notify("Copilot loaded")
-			require("copilot").setup()
-		end,
-	})
-
-	use({
-		"zbirenbaum/copilot-cmp",
-		after = { "copilot.lua" },
-		config = function()
-			require("copilot_cmp").setup()
-		end,
-	})
-
-	use({
-		"nyoom-engineering/oxocarbon.nvim",
-		opt = false,
-	})
-
-	use({
-		"ellisonleao/glow.nvim",
-		ft = "markdown",
-	})
-end
-
-return packer.setup(config, plugins)

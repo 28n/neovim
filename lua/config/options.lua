@@ -1,26 +1,37 @@
 local indent = 2
 
+local notifs = {}
 local notify = {
-	old = vim.notify,
-	lazy = nil,
+	orig = vim.notify,
+	lazy = function(...)
+		table.insert(notifs, { ... })
+	end,
 }
-notify.lazy = function(...)
-	local args = { ... }
-	vim.defer_fn(function()
-		if vim.notify == notify.lazy then
-			-- if vim.notify still hasn't been replaces yet, then something went wrong,
-			-- so use the old vim.notify instead
-			notify.old(unpack(args))
-		else
-			-- use the new notify
-			vim.notify(unpack(args))
-		end
-	end, 300)
-end
 vim.notify = notify.lazy
 
+local function lazy_notify()
+	local check = vim.loop.new_check()
+	local start = vim.loop.hrtime()
+	check:start(function()
+		if vim.notify ~= notify.lazy then
+		elseif (vim.loop.hrtime() - start) / 1e6 > 300 then
+			vim.notify = notify.orig
+		else
+			return
+		end
+		check:stop()
+		-- use the new notify
+		vim.schedule(function()
+			for _, notif in ipairs(notifs) do
+				vim.notify(unpack(notif))
+			end
+		end)
+	end)
+end
+lazy_notify()
+
 if vim.fn.has("nvim-0.8") == 1 then
-	--   vim.opt.spell = true -- Put new windows below current
+	vim.opt.spell = true -- Put new windows below current
 	vim.opt.cmdheight = 0
 
 	-- make all keymaps silent by default
@@ -39,8 +50,6 @@ end
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 vim.g.node_host_prog = "/Users/folke/.pnpm-global/5/node_modules/neovim/bin/cli.js"
-vim.g.python3_host_prog = "C:/Users/weedy/AppData/Local/Microsoft/WindowsApps/python3.exe"
--- C:\Users\weedy\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\python.exe
 vim.opt.autowrite = true -- enable auto write
 vim.opt.clipboard = "unnamedplus" -- sync with system clipboard
 -- vim.opt.concealcursor = "nc" -- Hide * markup for bold and italic
@@ -48,6 +57,11 @@ vim.opt.conceallevel = 3 -- Hide * markup for bold and italic
 vim.opt.confirm = true -- confirm to save changes before exiting modified buffer
 vim.opt.cursorline = true -- Enable highlighting of the current line
 vim.opt.expandtab = true -- Use spaces instead of tabs
+vim.opt.backup = true
+
+if vim.fn.has("nvim-0.8.0") == 1 then
+	vim.opt.backupdir = vim.fn.stdpath("state") .. "/backup"
+end
 
 -- vim.opt.foldexpr = "nvim_treesitter#foldexpr()" -- TreeSitter folding
 -- vim.opt.foldlevel = 6
@@ -56,7 +70,7 @@ vim.opt.expandtab = true -- Use spaces instead of tabs
 -- vim.opt.foldlevel = 0
 vim.o.formatoptions = "jcroqlnt" -- tcqj
 
-vim.opt.guifont = "JetBrainsMono Nerd Font:h12"
+vim.opt.guifont = "FiraCode Nerd Font:h11"
 vim.opt.grepprg = "rg --vimgrep"
 vim.opt.grepformat = "%f:%l:%c:%m"
 vim.opt.hidden = true -- Enable modified buffers in background
@@ -72,6 +86,7 @@ vim.opt.relativenumber = true -- Relative line numbers
 vim.opt.scrolloff = 4 -- Lines of context
 vim.opt.shiftround = true -- Round indent
 vim.opt.shiftwidth = indent -- Size of an indent
+vim.opt.laststatus = 0
 vim.opt.showmode = false -- dont show mode since we have a statusline
 vim.opt.sidescrolloff = 8 -- Columns of context
 vim.opt.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
@@ -105,6 +120,10 @@ vim.opt.fillchars = {
 	foldclose = "",
 }
 -- vim.o.shortmess = "IToOlxfitn"
+-- vim.opt.shortmess:get()
+if vim.fn.has("nvim-0.9") == 1 then
+	vim.o.shortmess = "filnxtToOFWIcC"
+end
 
 -- don't load the plugins below
 local builtins = {
@@ -148,8 +167,8 @@ local fences = {
 	"console=sh",
 }
 vim.g.markdown_fenced_languages = fences
-
-vim.cmd([[colorscheme oxocarbon]])
+vim.g.markdown_recommended_style = 0
+-- vim.cmd([[colorscheme oxocarbon]])
 
 ---Diffview Fillchars
 
