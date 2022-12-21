@@ -44,7 +44,14 @@ return {
     end,
   },
 
-  { "shaunsingh/oxocarbon.nvim", lazy = false, enabled = true },
+  {
+    "shaunsingh/oxocarbon.nvim",
+    lazy = false,
+    enabled = true,
+    config = function()
+      vim.cmd("colorscheme oxocarbon")
+    end
+  },
 
   { "ellisonleao/gruvbox.nvim", lazy = false },
 

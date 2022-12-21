@@ -174,3 +174,5 @@ vim.g.markdown_recommended_style = 0
 
 local set = vim.opt
 set.fillchars = set.fillchars + "diff:╱"
+
+vim.o.background = "dark"

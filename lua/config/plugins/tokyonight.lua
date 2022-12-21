@@ -62,7 +62,7 @@ function M.config()
       end
     end,
   })
-  tokyonight.load()
+  -- tokyonight.load()
 end
 
 return M
