@@ -118,6 +118,9 @@ function M.config()
     },
     teal_ls = {},
     vimls = {},
+    powershell_es = {
+      bundlePath = 'c:/w/PowerShellEditorServices',
+    },
     -- tailwindcss = {},
   }
 
