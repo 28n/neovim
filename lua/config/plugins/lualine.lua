@@ -62,7 +62,7 @@ function M.config()
         },
       },
       lualine_y = { "location" },
-      lualine_z = { { clock, separator = { right = "" } } },
+      lualine_z = { {clock, separator = { right = "" } } },
     },
     inactive_sections = {
       lualine_a = {},
