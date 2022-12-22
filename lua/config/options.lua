@@ -70,7 +70,7 @@ end
 -- vim.opt.foldlevel = 0
 vim.o.formatoptions = "jcroqlnt" -- tcqj
 
-vim.opt.guifont = "FiraCode Nerd Font:h11"
+vim.opt.guifont = "JetBrainsMono Nerd Font:h12"
 vim.opt.grepprg = "rg --vimgrep"
 vim.opt.grepformat = "%f:%l:%c:%m"
 vim.opt.hidden = true -- Enable modified buffers in background
