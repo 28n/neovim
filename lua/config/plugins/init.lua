@@ -97,7 +97,18 @@ return {
     end,
   },
 
-  { "stevearc/dressing.nvim", event = "VeryLazy" },
+  { "stevearc/dressing.nvim", init = function()
+    ---@diagnostic disable-next-line: duplicate-set-field
+      vim.ui.select = function(...)
+        require("lazy").load({ plugins = { "dressing.nvim" } })
+        return vim.ui.select(...)
+      end
+      ---@diagnostic disable-next-line: duplicate-set-field
+      vim.ui.input = function(...)
+        require("lazy").load({ plugins = { "dressing.nvim" } })
+        return vim.ui.input(...)
+      end
+  end},
 
   -- LSP
 
@@ -246,4 +257,9 @@ return {
       vim.g.matchup_matchparen_offscreen = { method = "status_manual" }
     end,
   },
+  {
+    "iamcco/markdown-preview.nvim",
+    ft = "markdown",
+    -- build = "cd app && yarn install",
+  }
 }
