@@ -8,7 +8,7 @@ M.notify = {
 }
 
 function M.notify.lazy(...)
-  table.insert(M.notify.notifs, { ... })
+  table.insert(M.notify.notifs, vim.F.pack_len(...))
 end
 
 function M.notify.setup()
@@ -29,7 +29,7 @@ function M.notify.setup()
     vim.schedule(function()
       ---@diagnostic disable-next-line: no-unknown
       for _, notif in ipairs(M.notify.notifs) do
-        vim.notify(unpack(notif))
+        vim.notify(vim.F.unpack_len(notif))
       end
     end)
   end)
@@ -81,15 +81,71 @@ function M.get_value(...)
   return vim.tbl_islist(value) and vim.tbl_count(value) <= 1 and value[1] or value
 end
 
-_G.d = function(...)
-  M.dump(M.get_value(...))
-end
+function M.switch(config)
+  config = vim.loop.fs_realpath(config)
+  local config_name = vim.fn.fnamemodify(config, ":p:~"):gsub("[\\/]", "."):gsub("^~%.", ""):gsub("%.$", "")
+  local root = vim.fn.fnamemodify("~/.nvim/" .. config_name, ":p"):gsub("/$", "")
+  vim.fn.mkdir(root, "p")
 
-_G.dd = function(...)
-  M.dump(M.get_value(...), { schedule = true })
+  ---@type table<string,string>
+  local old = {}
+  ---@type table<string,string>
+  local new = {}
+
+  for _, name in ipairs({ "config", "data", "state", "cache" }) do
+    local path = root .. "/" .. name
+    vim.fn.mkdir(path, "p")
+    local xdg = ("XDG_%s_HOME"):format(name:upper())
+    old[xdg] = vim.env[xdg] or vim.env.HOME .. "/." .. name
+    new[xdg] = path
+    if name == "config" then
+      path = path .. "/nvim"
+      pcall(vim.loop.fs_unlink, path)
+      vim.loop.fs_symlink(config, path, { dir = true })
+    end
+  end
+
+  ---@param env table<string,string>
+  local function apply(env)
+    for k, v in pairs(env) do
+      vim.env[k] = v
+    end
+  end
+
+  local function wrap(fn)
+    return function(...)
+      apply(old)
+      local ok, ret = pcall(fn, ...)
+      apply(new)
+      if ok then
+        return ret
+      end
+      error(ret)
+    end
+  end
+
+  vim.fn.termopen = wrap(vim.fn.termopen)
+
+  apply(new)
+
+  local ffi = require("ffi")
+  ffi.cdef([[char *runtimepath_default(bool clean_arg);]])
+  local rtp = ffi.string(ffi.C.runtimepath_default(false))
+  vim.go.rtp = rtp
+  vim.go.pp = rtp
+  dofile(root .. "/config/nvim/init.lua")
 end
 
 function M.setup()
+  _G.d = function(...)
+    M.dump(M.get_value(...))
+  end
+
+  _G.dd = function(...)
+    M.dump(M.get_value(...), { schedule = true })
+  end
+
+  vim.pretty_print = _G.d
   M.notify.setup()
   -- make all keymaps silent by default
   local keymap_set = vim.keymap.set
