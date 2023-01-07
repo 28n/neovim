@@ -4,7 +4,8 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 vim.opt.autowrite = true -- enable auto write
-vim.opt.clipboard = "unnamedplus" -- sync with system clipboard
+-- vim.opt.clipboard = "unnamedplus" -- sync with system clipboard
+vim.opt.clipboard = "win32yank"
 vim.opt.cmdheight = 1
 vim.opt.completeopt = "menu,menuone,noselect"
 vim.opt.conceallevel = 3 -- Hide * markup for bold and italic
@@ -48,8 +49,8 @@ vim.opt.wildmode = "longest:full,full" -- Command-line completion mode
 vim.opt.wrap = false -- Disable line wrap
 
 if vim.fn.has("nvim-0.9.0") == 1 then
-  vim.opt.splitkeep = "screen"
-  vim.o.shortmess = "filnxtToOFWIcC"
+	vim.opt.splitkeep = "screen"
+	vim.o.shortmess = "filnxtToOFWIcC"
 end
 
 -- fix markdown indentation settings
