@@ -18,7 +18,6 @@ require("lazy").setup({
 		{ import = "plugins" },
 	},
 	defaults = { lazy = true },
-	--   dev = { patterns = jit.os:find("Windows") and {} or { "folke" } },
 	install = { colorscheme = { "tokyonight", "habamax" } },
 	checker = { enabled = true },
 	diff = {
