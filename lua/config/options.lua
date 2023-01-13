@@ -6,5 +6,5 @@ if vim.fn.has("nvim-0.8") == 1 then
 	vim.opt.backupdir = vim.fn.stdpath("state") .. "/backup"
 end
 
-vim.g.node_host_prog = "/Users/folke/.pnpm-global/5/node_modules/neovim/bin/cli.js"
-vim.g.python3_host_prog = "C:/Windows/py.exe"
+-- vim.g.node_host_prog = "/Users/folke/.pnpm-global/5/node_modules/neovim/bin/cli.js"
+-- vim.g.python3_host_prog = "C:/Windows/py.exe"
