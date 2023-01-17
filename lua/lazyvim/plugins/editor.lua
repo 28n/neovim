@@ -3,40 +3,26 @@ local util = require("lazyvim.util")
 return {
 
 	-- file explorer
-	-- {
-	-- 	"nvim-neo-tree/neo-tree.nvim",
-	-- 	cmd = "Neotree",
-	-- 	keys = {
-	-- 		{
-	-- 			"<leader>fn",
-	-- 			function()
-	-- 				require("neo-tree.command").execute({ toggle = true, dir = require("lazyvim.util").get_root() })
-	-- 			end,
-	-- 			desc = "NeoTree (root dir)",
-	-- 		},
-	-- 		{ "<leader>fN", "<cmd>Neotree toggle<CR>", desc = "NeoTree (cwd)" },
-	-- 	},
-	-- 	init = function()
-	-- 		vim.g.neo_tree_remove_legacy_commands = 1
-	-- 	end,
-	-- 	config = {
-	-- 		filesystem = {
-	-- 			follow_current_file = true,
-	-- 			hijack_netrw_behavior = "open_current",
-	-- 		},
-	-- 	},
-	-- },
-
 	{
-		"ms-jpq/chadtree",
-		cmd = { "CHADopen", "CHADdeps" },
+		"nvim-neo-tree/neo-tree.nvim",
+		cmd = "Neotree",
 		keys = {
 			{
 				"<leader>ft",
 				function()
-					vim.cmd([[CHADopen]])
+					require("neo-tree.command").execute({ toggle = true, dir = require("lazyvim.util").get_root() })
 				end,
-				desc = "CHADTree",
+				desc = "NeoTree (root dir)",
+			},
+			{ "<leader>fT", "<cmd>Neotree toggle<CR>", desc = "NeoTree (cwd)" },
+		},
+		init = function()
+			vim.g.neo_tree_remove_legacy_commands = 1
+		end,
+		config = {
+			filesystem = {
+				follow_current_file = true,
+				hijack_netrw_behavior = "open_current",
 			},
 		},
 	},
