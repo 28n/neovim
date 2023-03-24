@@ -62,7 +62,6 @@ return {
 					},
 				},
 			},
-			gopls = {},
 			marksman = {},
 			pyright = {},
 			rust_analyzer = {
@@ -77,7 +76,7 @@ return {
 				},
 			},
 			yamlls = {},
-			sumneko_lua = {
+			lua_ls = {
 				-- cmd = { "/home/folke/projects/lua-language-server/bin/lua-language-server" },
 				single_file_support = true,
 				settings = {
@@ -130,7 +129,6 @@ return {
 			teal_ls = {},
 			vimls = {},
 			-- tailwindcss = {},
-			powershell_es = {},
 		},
 	},
 
