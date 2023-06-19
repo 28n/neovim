@@ -47,51 +47,5 @@ return {
   { "mfussenegger/nvim-treehopper", enabled = false },
   { "tpope/vim-repeat", enabled = false },
 
-  {
-    "folke/flash.nvim",
-    opts = {},
-    enabled = true,
-    event = "VeryLazy",
-    keys = {
-      {
-        "m",
-        mode = { "o", "x" },
-        function()
-          return require("flash.plugins.treesitter").jump()
-        end,
-      },
-      {
-        "s",
-        mode = { "n", "x", "o" },
-        function()
-          local ret = require("flash.commands").jump({
-            -- search = { mode = "fuzzy" },
-            -- mode = "forward",
-          })
-          return ret
-        end,
-        -- expr = true,
-      },
-      {
-        "S",
-        function()
-          return require("flash.commands").jump({
-            mode = "backward",
-          })
-        end,
-      },
-      {
-        "gs",
-        function()
-          return require("flash.commands").jump({})
-        end,
-      },
-      {
-        "gS",
-        function()
-          return require("flash").jump()
-        end,
-      },
-    },
-  },
+  
 }
