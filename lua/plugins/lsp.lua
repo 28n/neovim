@@ -1,182 +1,258 @@
 return {
-	-- neodev
-	{
-		"folke/neodev.nvim",
-		config = {
-			debug = true,
-			experimental = {
-				pathStrict = true,
-			},
-			library = {
-				--   runtime = "~/projects/neovim/runtime/",
-			},
-		},
-	},
+  -- neodev
+  {
+    "folke/neodev.nvim",
+    opts = {
+      debug = true,
+      experimental = {
+        pathStrict = true,
+      },
+      library = {
+        runtime = "~/projects/neovim/runtime/",
+      },
+    },
+  },
 
-	-- tools
-	{
-		"williamboman/mason.nvim",
-		ensure_installed = {
-			"prettierd",
-			"stylua",
-			"selene",
-			"luacheck",
-			"eslint_d",
-			"shellcheck",
-			"deno",
-			"shfmt",
-			"black",
-			"isort",
-			"flake8",
-		},
-	},
+  -- tools
+  {
+    "williamboman/mason.nvim",
+    opts = function(_, opts)
+      vim.list_extend(opts.ensure_installed, {
+        "stylua",
+        "selene",
+        "luacheck",
+        "shellcheck",
+        "shfmt",
+      })
+    end,
+  },
 
-	-- json schemas
-	"b0o/SchemaStore.nvim",
+  -- lsp servers
+  {
+    "neovim/nvim-lspconfig",
+    init = function()
+      -- disable lsp watcher. Too slow on linux
+      local ok, wf = pcall(require, "vim.lsp._watchfiles")
+      if ok then
+        wf._watchfunc = function()
+          return function() end
+        end
+      end
+    end,
+    opts = {
+      ---@type lspconfig.options
+      servers = {
+        -- rome = {
+        --   root_dir = function(fname)
+        --     return require("lspconfig").util.root_pattern("rome.json")(fname)
+        --   end,
+        --   mason = false,
+        --   settings = {
+        --     rome = {
+        --       rename = true,
+        --       -- requireConfiguration = true,
+        --     },
+        --   },
+        -- },
+        ansiblels = {},
+        bashls = {},
+        clangd = {},
+        -- denols = {},
+        cssls = {},
+        dockerls = {},
+        ruff_lsp = {},
+        tailwindcss = {
+          root_dir = function(...)
+            return require("lspconfig.util").root_pattern(".git")(...)
+          end,
+        },
+        tsserver = {
+          root_dir = function(...)
+            return require("lspconfig.util").root_pattern(".git")(...)
+          end,
+          single_file_support = false,
+          settings = {
+            typescript = {
+              inlayHints = {
+                includeInlayParameterNameHints = "literal",
+                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                includeInlayFunctionParameterTypeHints = true,
+                includeInlayVariableTypeHints = false,
+                includeInlayPropertyDeclarationTypeHints = true,
+                includeInlayFunctionLikeReturnTypeHints = true,
+                includeInlayEnumMemberValueHints = true,
+              },
+            },
+            javascript = {
+              inlayHints = {
+                includeInlayParameterNameHints = "all",
+                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                includeInlayFunctionParameterTypeHints = true,
+                includeInlayVariableTypeHints = true,
+                includeInlayPropertyDeclarationTypeHints = true,
+                includeInlayFunctionLikeReturnTypeHints = true,
+                includeInlayEnumMemberValueHints = true,
+              },
+            },
+          },
+        },
+        -- svelte = {},
+        html = {},
+        gopls = {},
+        marksman = {},
+        pyright = {
+          enabled = false,
+        },
+        rust_analyzer = {
+          settings = {
+            ["rust-analyzer"] = {
+              procMacro = { enable = true },
+              cargo = { allFeatures = true },
+              checkOnSave = {
+                command = "clippy",
+                extraArgs = { "--no-deps" },
+              },
+            },
+          },
+        },
+        yamlls = {
+          settings = {
+            yaml = {
+              keyOrdering = false,
+            },
+          },
+        },
+        lua_ls = {
+          -- enabled = false,
+          -- cmd = { "/home/folke/projects/lua-language-server/bin/lua-language-server" },
+          single_file_support = true,
+          settings = {
+            Lua = {
+              workspace = {
+                checkThirdParty = false,
+              },
+              completion = {
+                workspaceWord = true,
+                callSnippet = "Both",
+              },
+              misc = {
+                parameters = {
+                  -- "--log-level=trace",
+                },
+              },
+              hint = {
+                enable = true,
+                setType = false,
+                paramType = true,
+                paramName = "Disable",
+                semicolon = "Disable",
+                arrayIndex = "Disable",
+              },
+              doc = {
+                privateName = { "^_" },
+              },
+              type = {
+                castNumberToInteger = true,
+              },
+              diagnostics = {
+                disable = { "incomplete-signature-doc", "trailing-space" },
+                -- enable = false,
+                groupSeverity = {
+                  strong = "Warning",
+                  strict = "Warning",
+                },
+                groupFileStatus = {
+                  ["ambiguity"] = "Opened",
+                  ["await"] = "Opened",
+                  ["codestyle"] = "None",
+                  ["duplicate"] = "Opened",
+                  ["global"] = "Opened",
+                  ["luadoc"] = "Opened",
+                  ["redefined"] = "Opened",
+                  ["strict"] = "Opened",
+                  ["strong"] = "Opened",
+                  ["type-check"] = "Opened",
+                  ["unbalanced"] = "Opened",
+                  ["unused"] = "Opened",
+                },
+                unusedLocalExclude = { "_*" },
+              },
+              format = {
+                enable = false,
+                defaultConfig = {
+                  indent_style = "space",
+                  indent_size = "2",
+                  continuation_indent_size = "2",
+                },
+              },
+            },
+          },
+        },
+        vimls = {},
+      },
+      setup = {},
+    },
+  },
 
-	-- lsp servers
-	{
-		"neovim/nvim-lspconfig",
-		---@type lspconfig.options
-		servers = {
-			ansiblels = {},
-			bashls = {},
-			clangd = {},
-			cssls = {},
-			dockerls = {},
-			tsserver = {},
-			svelte = {},
-			eslint = {},
-			html = {},
-			jsonls = {
-				on_new_config = function(new_config)
-					new_config.settings.json.schemas = new_config.settings.json.schemas or {}
-					vim.list_extend(new_config.settings.json.schemas, require("schemastore").json.schemas())
-				end,
-				settings = {
-					json = {
-						format = {
-							enable = true,
-						},
-						validate = { enable = true },
-					},
-				},
-			},
-			marksman = {},
-			pyright = {},
-			rust_analyzer = {
-				settings = {
-					["rust-analyzer"] = {
-						cargo = { allFeatures = true },
-						checkOnSave = {
-							command = "clippy",
-							extraArgs = { "--no-deps" },
-						},
-					},
-				},
-			},
-			yamlls = {},
-			lua_ls = {
-				-- cmd = { "/home/folke/projects/lua-language-server/bin/lua-language-server" },
-				single_file_support = true,
-				settings = {
-					Lua = {
-						workspace = {
-							checkThirdParty = false,
-						},
-						completion = {
-							workspaceWord = true,
-							callSnippet = "Both",
-						},
-						misc = {
-							parameters = {
-								"--log-level=trace",
-							},
-						},
-						diagnostics = {
-							-- enable = false,
-							groupSeverity = {
-								strong = "Warning",
-								strict = "Warning",
-							},
-							groupFileStatus = {
-								["ambiguity"] = "Opened",
-								["await"] = "Opened",
-								["codestyle"] = "None",
-								["duplicate"] = "Opened",
-								["global"] = "Opened",
-								["luadoc"] = "Opened",
-								["redefined"] = "Opened",
-								["strict"] = "Opened",
-								["strong"] = "Opened",
-								["type-check"] = "Opened",
-								["unbalanced"] = "Opened",
-								["unused"] = "Opened",
-							},
-							unusedLocalExclude = { "_*" },
-						},
-						format = {
-							enable = false,
-							defaultConfig = {
-								indent_style = "space",
-								indent_size = "2",
-								continuation_indent_size = "2",
-							},
-						},
-					},
-				},
-			},
-			teal_ls = {},
-			vimls = {},
-			-- tailwindcss = {},
-		},
-	},
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      diagnostics = { virtual_text = { prefix = "icons" } },
+      setup = {
+        clangd = function(_, opts)
+          opts.capabilities.offsetEncoding = { "utf-16" }
+        end,
+      },
+    },
+  },
 
-	-- null-ls
-	{
-		"jose-elias-alvarez/null-ls.nvim",
-		config = function()
-			local nls = require("null-ls")
-			nls.setup({
-				debounce = 150,
-				save_after_format = false,
-				sources = {
-					-- nls.builtins.formatting.prettierd,
-					nls.builtins.formatting.stylua,
-					nls.builtins.formatting.fish_indent,
-					-- nls.builtins.formatting.fixjson.with({ filetypes = { "jsonc" } }),
-					-- nls.builtins.formatting.eslint_d,
-					-- nls.builtins.diagnostics.shellcheck,
-					nls.builtins.formatting.shfmt,
-					nls.builtins.diagnostics.markdownlint,
-					-- nls.builtins.diagnostics.luacheck,
-					nls.builtins.formatting.prettierd.with({
-						filetypes = { "markdown" }, -- only runs `deno fmt` for markdown
-					}),
-					nls.builtins.diagnostics.selene.with({
-						condition = function(utils)
-							return utils.root_has_file({ "selene.toml" })
-						end,
-					}),
-					-- nls.builtins.code_actions.gitsigns,
-					nls.builtins.formatting.isort,
-					nls.builtins.formatting.black,
-					nls.builtins.diagnostics.flake8,
-				},
-				root_dir = require("null-ls.utils").root_pattern(".null-ls-root", ".neoconf.json", ".git"),
-			})
-		end,
-	},
+  -- null-ls
+  {
+    "jose-elias-alvarez/null-ls.nvim",
+    dev = true,
+    opts = function(_, opts)
+      local nls = require("null-ls")
+      vim.list_extend(opts.sources, {
+        nls.builtins.formatting.dprint,
+        nls.builtins.formatting.prettier.with({ filetypes = { "markdown" } }),
+        nls.builtins.diagnostics.markdownlint,
+        nls.builtins.diagnostics.deno_lint,
+        nls.builtins.diagnostics.selene.with({
+          condition = function(utils)
+            return utils.root_has_file({ "selene.toml" })
+          end,
+        }),
+        nls.builtins.formatting.isort,
+        nls.builtins.formatting.black,
+        nls.builtins.diagnostics.flake8,
+        nls.builtins.diagnostics.luacheck.with({
+          condition = function(utils)
+            return utils.root_has_file({ ".luacheckrc" })
+          end,
+        }),
+      })
+    end,
+  },
 
-	-- lsp symbol navigation for lualine
-	{
-		"SmiteshP/nvim-navic",
-		init = function()
-			vim.g.navic_silence = true
-			require("lazyvim.util").on_attach(function(client, buffer)
-				require("nvim-navic").attach(client, buffer)
-			end)
-		end,
-		config = { separator = " ", highlight = true, depth_limit = 5 },
-	},
+  -- inlay hints
+  {
+    "lvimuser/lsp-inlayhints.nvim",
+    branch = "anticonceal",
+    event = "LspAttach",
+    opts = {},
+    config = function(_, opts)
+      require("lsp-inlayhints").setup(opts)
+      vim.api.nvim_create_autocmd("LspAttach", {
+        group = vim.api.nvim_create_augroup("LspAttach_inlayhints", {}),
+        callback = function(args)
+          if not (args.data and args.data.client_id) then
+            return
+          end
+          ---@type lsp.Client
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          require("lsp-inlayhints").on_attach(client, args.buf, false)
+        end,
+      })
+    end,
+  },
 }
